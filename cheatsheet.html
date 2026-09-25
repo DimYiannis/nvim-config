@@ -1,0 +1,304 @@
+<title>LazyVim Cheat Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #1a1b26;
+    --bg-elev: #20222f;
+    --bg-card: #24283b;
+    --border: #3b3f58;
+    --fg: #c0caf5;
+    --fg-dim: #8891c5;
+    --muted: #565f89;
+    --accent: #7aa2f7;
+    --accent-dim: #3d59a1;
+    --green: #9ece6a;
+    --yellow: #e0af68;
+    --key-bg: #1f2335;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="light"]) {
+      --bg: #f4f4f8;
+      --bg-elev: #ffffff;
+      --bg-card: #ffffff;
+      --border: #dcdfec;
+      --fg: #2a2d45;
+      --fg-dim: #565f89;
+      --muted: #8f96b5;
+      --accent: #3d59a1;
+      --accent-dim: #c7d3f5;
+      --green: #3a7a2e;
+      --yellow: #8a5a00;
+      --key-bg: #eceef7;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f4f8;
+    --bg-elev: #ffffff;
+    --bg-card: #ffffff;
+    --border: #dcdfec;
+    --fg: #2a2d45;
+    --fg-dim: #565f89;
+    --muted: #8f96b5;
+    --accent: #3d59a1;
+    --accent-dim: #c7d3f5;
+    --green: #3a7a2e;
+    --yellow: #8a5a00;
+    --key-bg: #eceef7;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 32px 48px;
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  h1 span { color: var(--accent); }
+
+  .leader-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+  }
+  .leader-note kbd { color: var(--green); }
+
+  .subtitle {
+    color: var(--fg-dim);
+    font-size: 0.9rem;
+    margin: 0 0 22px;
+  }
+
+  #search {
+    width: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-bottom: 26px;
+    outline: none;
+  }
+  #search::placeholder { color: var(--muted); }
+  #search:focus { border-color: var(--accent); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 16px 6px;
+  }
+
+  .card h2 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 0;
+    border-top: 1px solid var(--border);
+  }
+  .card .row:first-of-type { border-top: none; }
+  .row.hide { display: none; }
+
+  .row .desc {
+    font-size: 0.86rem;
+    color: var(--fg);
+  }
+
+  .keys {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: var(--key-bg);
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    color: var(--green);
+    padding: 2px 7px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 40px 0;
+    display: none;
+  }
+
+  footer {
+    margin-top: 32px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Lazy<span>Vim</span> Cheat Sheet</h1>
+    <div class="leader-note">leader = <kbd>space</kbd></div>
+  </header>
+  <p class="subtitle">Your config: LazyVim + tokyonight, ruff (pyright off), cmake extra</p>
+
+  <input id="search" type="text" placeholder="Filter shortcuts... (e.g. 'diagnostic', 'buffer', 'git')" autocomplete="off">
+
+  <div class="grid" id="grid">
+
+    <div class="card">
+      <h2>Files &amp; Search</h2>
+      <div class="row"><span class="desc">Find files</span><span class="keys"><kbd>space</kbd><kbd>f</kbd><kbd>f</kbd></span></div>
+      <div class="row"><span class="desc">Live grep (search in files)</span><span class="keys"><kbd>space</kbd><kbd>/</kbd></span></div>
+      <div class="row"><span class="desc">Recent files</span><span class="keys"><kbd>space</kbd><kbd>f</kbd><kbd>r</kbd></span></div>
+      <div class="row"><span class="desc">File explorer toggle</span><span class="keys"><kbd>space</kbd><kbd>e</kbd></span></div>
+      <div class="row"><span class="desc">Find nvim config file</span><span class="keys"><kbd>space</kbd><kbd>f</kbd><kbd>c</kbd></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Buffers</h2>
+      <div class="row"><span class="desc">List open buffers</span><span class="keys"><kbd>space</kbd><kbd>f</kbd><kbd>b</kbd></span></div>
+      <div class="row"><span class="desc">Next buffer</span><span class="keys"><kbd>shift</kbd><kbd>l</kbd></span></div>
+      <div class="row"><span class="desc">Prev buffer</span><span class="keys"><kbd>shift</kbd><kbd>h</kbd></span></div>
+      <div class="row"><span class="desc">Close buffer</span><span class="keys"><kbd>space</kbd><kbd>b</kbd><kbd>d</kbd></span></div>
+      <div class="row"><span class="desc">Switch to last buffer</span><span class="keys"><kbd>space</kbd><kbd>b</kbd><kbd>b</kbd></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Windows</h2>
+      <div class="row"><span class="desc">Move to left/right/up/down split</span><span class="keys"><kbd>ctrl</kbd><kbd>h/j/k/l</kbd></span></div>
+      <div class="row"><span class="desc">Split below</span><span class="keys"><kbd>space</kbd><kbd>-</kbd></span></div>
+      <div class="row"><span class="desc">Split right</span><span class="keys"><kbd>space</kbd><kbd>|</kbd></span></div>
+      <div class="row"><span class="desc">Close split</span><span class="keys"><kbd>ctrl</kbd><kbd>w</kbd><kbd>q</kbd></span></div>
+      <div class="row"><span class="desc">Resize split</span><span class="keys"><kbd>ctrl</kbd><kbd>arrows</kbd></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Code / LSP</h2>
+      <div class="row"><span class="desc">Go to definition</span><span class="keys"><kbd>g</kbd><kbd>d</kbd></span></div>
+      <div class="row"><span class="desc">Find references</span><span class="keys"><kbd>g</kbd><kbd>r</kbd></span></div>
+      <div class="row"><span class="desc">Hover docs</span><span class="keys"><kbd>K</kbd></span></div>
+      <div class="row"><span class="desc">Code action</span><span class="keys"><kbd>space</kbd><kbd>c</kbd><kbd>a</kbd></span></div>
+      <div class="row"><span class="desc">Rename symbol</span><span class="keys"><kbd>space</kbd><kbd>c</kbd><kbd>r</kbd></span></div>
+      <div class="row"><span class="desc">Format file (ruff for .py)</span><span class="keys"><kbd>space</kbd><kbd>c</kbd><kbd>f</kbd></span></div>
+      <div class="row"><span class="desc">Next / prev diagnostic</span><span class="keys"><kbd>]</kbd><kbd>d</kbd> / <kbd>[</kbd><kbd>d</kbd></span></div>
+      <div class="row"><span class="desc">Line diagnostics</span><span class="keys"><kbd>space</kbd><kbd>c</kbd><kbd>d</kbd></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Jump / Flash</h2>
+      <div class="row"><span class="desc">Flash jump (type 2 chars, hit label)</span><span class="keys"><kbd>s</kbd></span></div>
+      <div class="row"><span class="desc">Flash treesitter jump</span><span class="keys"><kbd>S</kbd></span></div>
+      <div class="row"><span class="desc">Jump to top of file</span><span class="keys"><kbd>g</kbd><kbd>g</kbd></span></div>
+      <div class="row"><span class="desc">Jump to bottom of file</span><span class="keys"><kbd>G</kbd></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Git</h2>
+      <div class="row"><span class="desc">Open lazygit</span><span class="keys"><kbd>space</kbd><kbd>g</kbd><kbd>g</kbd></span></div>
+      <div class="row"><span class="desc">Next / prev hunk</span><span class="keys"><kbd>]</kbd><kbd>h</kbd> / <kbd>[</kbd><kbd>h</kbd></span></div>
+      <div class="row"><span class="desc">Stage hunk</span><span class="keys"><kbd>space</kbd><kbd>g</kbd><kbd>h</kbd><kbd>s</kbd></span></div>
+      <div class="row"><span class="desc">Preview hunk</span><span class="keys"><kbd>space</kbd><kbd>g</kbd><kbd>h</kbd><kbd>p</kbd></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Terminal &amp; Extras</h2>
+      <div class="row"><span class="desc">Toggle terminal</span><span class="keys"><kbd>ctrl</kbd><kbd>/</kbd></span></div>
+      <div class="row"><span class="desc">Open Lazy plugin manager</span><span class="keys"><kbd>:Lazy</kbd></span></div>
+      <div class="row"><span class="desc">Open LazyExtras (enable extras)</span><span class="keys"><kbd>:LazyExtras</kbd></span></div>
+      <div class="row"><span class="desc">Open Mason (LSP/tool installer)</span><span class="keys"><kbd>:Mason</kbd></span></div>
+      <div class="row"><span class="desc">Preview all keymaps</span><span class="keys"><kbd>space</kbd> <em>(wait)</em></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Basic Vim Motions</h2>
+      <div class="row"><span class="desc">Insert before / after cursor</span><span class="keys"><kbd>i</kbd> / <kbd>a</kbd></span></div>
+      <div class="row"><span class="desc">New line below / above</span><span class="keys"><kbd>o</kbd> / <kbd>O</kbd></span></div>
+      <div class="row"><span class="desc">Delete / yank / paste line</span><span class="keys"><kbd>dd</kbd> <kbd>yy</kbd> <kbd>p</kbd></span></div>
+      <div class="row"><span class="desc">Change inner / around word</span><span class="keys"><kbd>ciw</kbd> / <kbd>caw</kbd></span></div>
+      <div class="row"><span class="desc">Undo / redo</span><span class="keys"><kbd>u</kbd> / <kbd>ctrl</kbd><kbd>r</kbd></span></div>
+      <div class="row"><span class="desc">Visual / line / block select</span><span class="keys"><kbd>v</kbd> <kbd>V</kbd> <kbd>ctrl</kbd><kbd>v</kbd></span></div>
+      <div class="row"><span class="desc">Save / quit / save+quit</span><span class="keys"><kbd>:w</kbd> <kbd>:q</kbd> <kbd>:wq</kbd></span></div>
+    </div>
+
+  </div>
+
+  <p class="empty" id="empty">No shortcuts match.</p>
+
+  <footer>generated for your ~/.config/nvim setup</footer>
+</div>
+
+<script>
+(function() {
+  var search = document.getElementById('search');
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.row'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var empty = document.getElementById('empty');
+
+  function filter() {
+    var q = search.value.trim().toLowerCase();
+    var anyVisible = false;
+    cards.forEach(function(card) {
+      var cardRows = card.querySelectorAll('.row');
+      var cardHasMatch = false;
+      cardRows.forEach(function(row) {
+        var text = row.textContent.toLowerCase();
+        var match = q === '' || text.indexOf(q) !== -1;
+        row.classList.toggle('hide', !match);
+        if (match) { cardHasMatch = true; anyVisible = true; }
+      });
+      card.style.display = cardHasMatch ? '' : 'none';
+    });
+    empty.style.display = anyVisible ? 'none' : 'block';
+  }
+
+  search.addEventListener('input', filter);
+})();
+</script>
